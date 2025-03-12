@@ -1,0 +1,5 @@
+postgres_data
+letsencrypt
+.env
+.env.local
+.env.development.local

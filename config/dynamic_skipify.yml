@@ -1,0 +1,66 @@
+http:
+  services:
+    skipify-dev-back:
+      loadBalancer:
+        servers:
+          - url: "localhost:8000"
+    
+    skipify-dev-front:
+      loadBalancer:
+        servers:
+          - url: "localhost:3000"
+
+  routers:
+    to-skipify-dev-back-staff:
+      entryPoints:
+        - "websecure"
+      tls:
+        certResolver: myresolver
+      rule: "Host(`skipify.dev.ezdoes.xyz`) && PathPrefix(`/staff`)"
+      service: skipify-dev-back
+      priority: 110
+
+    to-skipify-dev-back-api:
+      entryPoints:
+        - "websecure"
+      tls:
+        certResolver: myresolver
+      rule: "Host(`skipify.dev.ezdoes.xyz`) && PathPrefix(`/api`)"
+      service: skipify-dev-back
+      priority: 108
+
+    to-skipify-dev-back-api-wildcard:
+      entryPoints:
+        - "websecure"
+      tls:
+        certResolver: myresolver
+      rule: "Host(`skipify.dev.ezdoes.xyz`) && PathPrefix(`/api/`)"
+      service: skipify-dev-back
+      priority: 107
+
+    to-skipify-dev-back-static-admin:
+      entryPoints:
+        - "websecure"
+      tls:
+        certResolver: myresolver
+      rule: "Host(`skipify.dev.ezdoes.xyz`) && PathPrefix(`/static/admin`)"
+      service: skipify-dev-back
+      priority: 106
+
+    to-skipify-dev-back-static-rest-framework:
+      entryPoints:
+        - "websecure"
+      tls:
+        certResolver: myresolver
+      rule: "Host(`skipify.dev.ezdoes.xyz`) && PathPrefix(`/static/rest_framework/`)"
+      service: skipify-dev-back
+      priority: 105
+
+    to-skipify-dev-front:
+      entryPoints:
+        - "websecure"
+      rule: "Host(`skipify.dev.ezdoes.xyz`) && PathPrefix(`/`)"
+      tls:
+        certResolver: myresolver
+      service: skipify-dev-front
+      priority: 50

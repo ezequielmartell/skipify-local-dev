@@ -1,0 +1,3 @@
+https://github.com/ezequielmartell/skipify-react-router
+https://github.com/ezequielmartell/skipify-django-backend
+https://github.com/ezequielmartell/skipify-aws-infrastructure
