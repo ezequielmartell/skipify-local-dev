@@ -1,0 +1,26 @@
+log:
+  level: INFO
+
+api:
+  insecure: true  # Enable the dashboard without authentication (not recommended for production)
+
+providers:
+  docker:
+    exposedByDefault: false  # Ensure only explicitly labeled containers are exposed
+  file:
+    directory: /config
+    watch: true
+
+entryPoints:
+  web:
+    address: ":80"
+  websecure:
+    address: ":443"
+
+tls:
+  stores:
+    default:
+      defaultCertificate:
+        certFile: /config/certs/spotify.local.crt
+        keyFile: /config/certs/spotify.local.key
+

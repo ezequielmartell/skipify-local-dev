@@ -1,0 +1,7 @@
+http:
+  middlewares:
+    redirectscheme:
+      redirectScheme:
+        scheme: https
+        permanent: true
+        port: "443"

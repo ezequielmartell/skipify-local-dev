@@ -1,20 +1,5 @@
 services:
 
-  backend:
-    build: /root/skipify_2/skipify-django-backend/
-    container_name: "skipify-backend"
-    command: gunicorn django_aws.wsgi:application --bind 0.0.0.0:8000
-    # volumes:
-    #   - .:/code
-    env_file:
-      - ./.env
-      # - ../skipify-django-backend/.env
-    ports:
-      - 8000:8000
-    depends_on:
-      - db
-      - redis
-
   db:
     image: postgres:17.4
     container_name: "skipify-postgres"
@@ -25,62 +10,60 @@ services:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
 
-  redis:
-    container_name: "skipify-redis"
-    image: redis:7
+  sqs:
+    container_name: "skipify-sqs"
+    image: softwaremill/elasticmq-native
     ports:
-      - 6379:6379
+      - 9324:9324
+      - 9325:9325
 
-  celery:
-    build: /root/skipify_2/skipify-django-backend/
-    container_name: "skipify-celery"
-    command: celery -A django_aws worker --loglevel=INFO -B
-    volumes:
-      - .:/code
-    env_file:
-      - ./.env
-      # - ../skipify-django-backend/.env
-    depends_on:
-      - db
-      - redis
-      - backend
+  # celery:
+  #   build: ../skipify-django-backend/
+  #   container_name: "skipify-celery"
+  #   command: celery -A django_aws worker --loglevel=INFO -B
+  #   volumes:
+  #     - .:/code
+  #   env_file:
+  #     - ./.env
+  #     # - ../skipify-django-backend/.env
+  #   depends_on:
+  #     - db
+  #     - sqs
+  #     - backend
 
-  frontend:
-    build: ../skipify-react-router/
-    container_name: "skipify-frontend"
-    command: nginx -g 'daemon off;'
-    ports:
-      - 3000:80
+  # frontend:
+  #   build: ../skipify-react-router/
+  #   container_name: "skipify-frontend"
+  #   command: nginx -g 'daemon off;'
+  #   ports:
+  #     - 3000:80
 
+  # backend:
+  #   build: ../skipify-django-backend/
+  #   container_name: "skipify-backend"
+  #   command: gunicorn django_aws.wsgi:application --bind 0.0.0.0:8000
+  #   # volumes:
+  #   #   - .:/code
+  #   env_file:
+  #     - ./.env
+  #     # - ../skipify-django-backend/.env
+  #   ports:
+  #     - 8000:8000
+  #   depends_on:
+  #     - db
+  #     - sqs
+  
   traefik:
-    image: "traefik:v3.0"
-    container_name: "skipify-traefik"
-    command:
-      - "--log.level=INFO"
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--providers.file.directory=config"
-      - "--entryPoints.web.address=:80"
-      - "--entryPoints.websecure.address=:443"
-      - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
-      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
-      # uncomment line below for cert testing
-      - "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
-      - "--certificatesresolvers.myresolver.acme.email=ssl@thinkmartell.com"
-      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
-    labels:
-      - "traefik.http.middlewares.redirectscheme.redirectscheme.scheme=https"
-      - "traefik.http.middlewares.redirectscheme.redirectscheme.permanent=true"
-      - "traefik.http.middlewares.redirectscheme.redirectscheme.port=443"
-    restart: "unless-stopped"
-    ports:
-      - "80:80"
-      - "443:443"
-      - "8080:8080"
-    volumes:
-      - "./config:/config"
-      - "./letsencrypt:/letsencrypt"
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-# volumes:
-#   postgres_data:
+      image: "traefik:v3.0"
+      container_name: "skipify-traefik"
+      restart: "unless-stopped"
+      ports:
+        - "80:80"
+        - "443:443"
+        - "8080:8080"
+      network_mode: "host"
+      volumes:
+        - "./config:/config"
+        - "./config/traefik.yml:/etc/traefik/traefik.yml"  # Mount the traefik.yml file
+        - "./letsencrypt:/letsencrypt"
+        - "/var/run/docker.sock:/var/run/docker.sock:ro"

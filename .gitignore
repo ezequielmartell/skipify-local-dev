@@ -3,3 +3,6 @@ letsencrypt
 .env
 .env.local
 .env.development.local
+*.crt
+*.key
+*.pem
