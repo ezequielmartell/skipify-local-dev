@@ -17,62 +17,63 @@ npm run dev
 # possible option is to edit tasks.json in the root of the project to add a new task that runs this script in a new terminal window
 # and then bind a key to it in keybindings.json
 
-# {
-#     // See https://go.microsoft.com/fwlink/?LinkId=733558
-#     // for the documentation about the tasks.json format
-#     "version": "2.0.0",
-#     "tasks": [
-#         {
-#             "label": "runDevelopment",
-#             "dependsOrder": "parallel",
-#             "dependsOn": [
-#                 "backend",
-#                 "celery",
-#                 "frontend",
-#                 "services"
-#             ]
-#         },
-#         {
-#             "label": "backend",
-#             "type": "shell",
-#             "command": "cd skipify-django-backend && source venv/bin/activate && python manage.py runserver 0.0.0.0:8000",
-#             "presentation": {
-#                 "panel": "dedicated"
-#             }
-#         },
-#         {
-#             "label": "celery",
-#             "type": "shell",
-#             "command": "cd skipify-django-backend && source venv/bin/activate && celery -A django_aws worker --loglevel=info -B",
-#             "presentation": {
-#                 "panel": "dedicated"
-#             }
-#         },
-#         {
-#             "label": "frontend",
-#             "type": "shell",
-#             "command": "cd skipify-react-router && npm run dev",
-#             "presentation": {
-#                 "panel": "dedicated"
-#             }
-#         },
-#         {
-#             "label": "services",
-#             "type": "shell",
-#             "command": "cd skipify-local-dev && docker compose up",
-#             "presentation": {
-#                 "panel": "dedicated"
-#             }
-#         }
-#     ]
-# } 
+make sure venv is setup through VSCODE so that your terminals use the right interpreter by default.
+<!-- {
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "runDevelopment",
+            "dependsOrder": "parallel",
+            "dependsOn": [
+                "backend",
+                "celery",
+                "frontend",
+                "services"
+            ]
+        },
+        {
+            "label": "backend",
+            "type": "shell",
+            "command": "cd skipify-django-backend && python manage.py runserver 0.0.0.0:8000",
+            "presentation": {
+                "panel": "dedicated"
+            }
+        },
+        {
+            "label": "celery",
+            "type": "shell",
+            "command": "cd skipify-django-backend && celery -A django_aws worker --loglevel=info -B",
+            "presentation": {
+                "panel": "dedicated"
+            }
+        },
+        {
+            "label": "frontend",
+            "type": "shell",
+            "command": "cd skipify-react-router && npm run dev",
+            "presentation": {
+                "panel": "dedicated"
+            }
+        },
+        {
+            "label": "services",
+            "type": "shell",
+            "command": "cd skipify-local-dev && docker compose up",
+            "presentation": {
+                "panel": "dedicated"
+            }
+        }
+    ]
+}  -->
 
 
-# // Place your key bindings in this file to override the defaults
-# [
-#     {
-#         "key": "alt+r",     // whatever keybinding you want
-#         "command": "workbench.action.tasks.runTask",
-#         "args": "runDevelopment"
-#       }
-# ]
+# Place your key bindings in this file to override the defaults -->
+ <!-- [
+     {
+         "key": "alt+r",     // whatever keybinding you want
+         "command": "workbench.action.tasks.runTask",
+         "args": "runDevelopment"
+       }
+ ] -->
